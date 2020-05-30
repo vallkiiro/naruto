@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<style>
+        .character{
+            width: 100px;
+            position: absolute;
+        }
+        .heart{
+            width: 30px;
+          	position: absolute;
+          	top: 100px;
+          	display: none;
+        }
+        .position{
+        	position: absolute;
+        }
+        .f-family{
+        	font-family: Courier New;
+        }
+        .target{
+			width: 500px;
+			background-color: #e8b95a;
+			transition: 1s;
+			position: absolute;
+			left: 520px;
+			top: -500px;
+			border-radius: 40px;
+			text-align: center;
+		}
+		.close1{
+			display: block;
+			margin-left: auto;
+			margin-right: auto;
+		}
+    </style>
+</head>
+<body class="body">
+	<div class="menu"></div>
+	<div class="game">
+		<img src="heart.png" class="heart" style="left: 10px">
+		<img src="heart.png" class="heart"style="left: 50px">
+		<img src="heart.png" class="heart"style="left: 90px">
+	</div>
+<script type="text/javascript">
+	let body = document.querySelector(".body")
+	body.style.backgroundImage = "url(background.jpg)"
+	body.style.backgroundSize = "100% 100%"
+	body.style.height = "730px"
+	body.classList.add("col-12", 'f-family')
+
+// menu
+	let menu = document.querySelector(".menu")
+
+	let welcome = document.createElement("h1")
+	menu.appendChild(welcome)
+	welcome.innerHTML = 'You are welcome!'
+	welcome.classList.add("text-light", 'position')
+	welcome.style.left = "900px"
+	welcome.style.top = "100px"
+
+	let play = document.createElement('button')
+	play.innerHTML = "PLAY"
+	play.classList.add('btn', 'btn-secondary', 'position', 'col-3')
+	play.style.left = "900px"
+	play.style.top = "230px"
+
+	let help = document.createElement('button')
+	help.innerHTML = "HELP"
+	help.classList.add('btn', 'btn-secondary', 'position', 'col-3')
+	help.style.left = "900px"
+	help.style.top = "300px"
+
+	menu.appendChild(play)
+	menu.appendChild(help)
+
+
+	let game = document.querySelector(".game")
+
+	let getRandomX = function(){
+		let random = Math.random()*1400
+		random = Math.round(random)
+		return random;
+	}
+	let getRandomY = function(){
+		let random = Math.random()*600
+		random = Math.round(random)
+		return random;
+	}
+	let getRandomC = function(){
+		let random = Math.random()*3
+		random = Math.round(random)
+		return random;
+	}
+	let p = 0
+	let n = 0
+	let sec = 15
+
+	help.onclick = function(){
+		let text = document.createElement("h1")
+		menu.appendChild(text)
+		text.innerHTML = 'Собери Наруто! Только не нажимай на других персонажей';
+	}
+
+// play
+	play.onclick = function(){
+		menu.style.display = 'none'
+		body.style.backgroundImage = "url(background3.jpg)"
+		body.style.height = "720px"
+
+		let points = document.createElement("h2")
+		game.appendChild(points)
+		points.innerHTML = 'points :'
+		points.classList.add("text-light", 'position')
+		points.style.top = "50px"
+
+		let quantity = document.createElement("h2")
+		game.appendChild(quantity)
+		quantity.innerHTML = 'quantity :'
+		quantity.classList.add("text-light", 'position')
+
+		let timer = document.createElement("h2")
+		game.appendChild(timer)
+		timer.innerHTML = 'time :'
+		timer.classList.add("text-light", 'position')
+		timer.style.top = "150px"
+
+
+		let hearts = document.querySelectorAll(".heart")
+		hearts[0].style.display = "block"
+		hearts[1].style.display = "block"
+		hearts[2].style.display = "block"
+		let live = 2
+
+		let time = function(){
+
+			let naruto = document.createElement("img")
+			game.appendChild(naruto)
+
+			let narutophoto = ["1.png", "naruto.png", "naruto2.png", "9.png",]
+			naruto.src = narutophoto[getRandomC()]
+			naruto.classList.add("character")
+
+			naruto.style.left = getRandomX() + "px"
+			naruto.style.top = getRandomY()+ "px"
+			sec = sec - 1
+			timer.innerHTML = 'time : ' + sec
+
+			n = n + 1
+			quantity.innerHTML = 'quantity : ' + n
+			naruto.onclick = function(){
+				naruto.style.display = "none"
+				p = p + 1
+				points.innerHTML = 'points : ' + p
+			}
+			let others = document.createElement("img")
+			game.appendChild(others)
+
+			let othersphoto = ["16.png", "15.png", "11.png", "4.png",]
+			others.src = othersphoto[getRandomC()]
+			others.classList.add("character")
+
+			others.style.left = getRandomX() + "px"
+			others.style.top = getRandomY()+ "px"
+
+			others.onclick = function(){
+				others.style.display = "none"
+				p = p - 1
+				points.innerHTML = 'points : ' + p
+				hearts[live].style.display = 'none'
+				live = live - 1
+				if(live<0){
+					alert("ты проиграл!")
+					clearInterval(timer1)
+				}
+
+
+			}	
+			
+
+		}
+		let timer1 = setInterval(time,800);
+		let end = function(){
+			if(p>10){
+				alert("winner!")
+				clearInterval(timer1)
+			}
+			if(p<10){
+				alert("loser!")
+				clearInterval(timer1)
+			}
+		}
+
+		
+		setTimeout(end, 10000)
+
+		
+	}
+	
+
+	
+
+	
+</script>
+</body>
+</html>
